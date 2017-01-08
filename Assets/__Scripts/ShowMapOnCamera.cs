@@ -6,8 +6,8 @@ public class ShowMapOnCamera : MonoBehaviour {
 
 
     static public ShowMapOnCamera   S;
-	static public int[,]		MAP;
-	static public List<Tile>	TILE_POOL;
+    static public int[,]		MAP;
+    static public List<Tile>	TILE_POOL;
     static public Tile[,]       MAP_TILES; // This will largely remain empty
     static public Vector2       TEX_SCALE;
     static public int           SPRITE_SHEET_W;
@@ -43,43 +43,43 @@ public class ShowMapOnCamera : MonoBehaviour {
     }
 
 
-	void Start () {
-		// Remove the line endings from the text of the colision and destructible data
+    void Start () {
+        // Remove the line endings from the text of the colision and destructible data
         collisionS = RemoveLineEndings( collisionData.text );
         destructibleS = RemoveLineEndings( destructibleData.text );
 
-		// Read in the map data
-		string[] lines = mapData.text.Split('\n');
-		h = lines.Length;
-		string[] tileNums = lines[0].Split(' ');
-		w = tileNums.Length;
+        // Read in the map data
+        string[] lines = mapData.text.Split('\n');
+        h = lines.Length;
+        string[] tileNums = lines[0].Split(' ');
+        w = tileNums.Length;
 
-		// Place the map data into a 2D Array to make it faster to access
-		MAP = new int[w,h];
-		for (int j=0; j<h; j++) {
-			tileNums = lines[j].Split(' '); // Yes, this is slightly inefficient because it repeats a prev line for j=0. Does that actually matter? - JB
-			for (int i=0; i<w; i++) {
-				MAP[i,j] = int.Parse( tileNums[i] );
-			}
-		}
+        // Place the map data into a 2D Array to make it faster to access
+        MAP = new int[w,h];
+        for (int j=0; j<h; j++) {
+            tileNums = lines[j].Split(' '); // Yes, this is slightly inefficient because it repeats a prev line for j=0. Does that actually matter? - JB
+            for (int i=0; i<w; i++) {
+                MAP[i,j] = int.Parse( tileNums[i] );
+            }
+        }
 
 
-		// Generate the mapAnchor to which all of the Tiles will be parented
-		GameObject go;
-		go = new GameObject("MapAnchor");
-		mapAnchor = go.transform;
+        // Generate the mapAnchor to which all of the Tiles will be parented
+        GameObject go;
+        go = new GameObject("MapAnchor");
+        mapAnchor = go.transform;
 
-		// Generate quad pool
-		screenW = (int)screenSize.x + 2*screenSizeOverage;
-		screenH = (int)screenSize.y + 2*screenSizeOverage;
+        // Generate quad pool
+        screenW = (int)screenSize.x + 2*screenSizeOverage;
+        screenH = (int)screenSize.y + 2*screenSizeOverage;
         screenW2 = screenW/2;
         screenH2 = screenH/2; // Because screenH is 15, this will be a little short, but screenSizeOverage takes care of that - JB
-		TILE_POOL = new List<Tile>();
+        TILE_POOL = new List<Tile>();
 
         MAP_TILES = new Tile[w,h]; // Should fill with nulls - JB
 
-		RedrawScreen(true);
-	}
+        RedrawScreen(true);
+    }
 
 
     void FixedUpdate() {
@@ -99,8 +99,8 @@ public class ShowMapOnCamera : MonoBehaviour {
             }
         }
 
-        int x = Mathf.RoundToInt(CameraFollow.S.transform.position.x);
-        int y = Mathf.RoundToInt(CameraFollow.S.transform.position.y);
+        int x = Mathf.RoundToInt(Camera.main.transform.position.x);
+        int y = Mathf.RoundToInt(Camera.main.transform.position.y);
         
         int i0 = x - screenW2;
         int i1 = x + screenW2;
@@ -141,7 +141,7 @@ public class ShowMapOnCamera : MonoBehaviour {
 
 
 
-	static public Tile GetTile() {
+    static public Tile GetTile() {
         int n = TILE_POOL.Count-1;
 
         // If the pool is empty, create a new Tile
@@ -155,9 +155,9 @@ public class ShowMapOnCamera : MonoBehaviour {
         Tile t = TILE_POOL[ n ];
         TILE_POOL.RemoveAt( n );
         return t;
-	}
+    }
 
-	static public void PushTile(Tile t) {
+    static public void PushTile(Tile t) {
         // Remove the Tile from MAP_TILES if necessary
         if (t.x>=0 && t.x<S.w && t.y>=0 && t.y<S.h) {
             if (MAP_TILES[t.x, t.y] == t) {
@@ -165,18 +165,18 @@ public class ShowMapOnCamera : MonoBehaviour {
             }
         }
 
-		t.gameObject.SetActive(false);
-		TILE_POOL.Add(t);
-	}
+        t.gameObject.SetActive(false);
+        TILE_POOL.Add(t);
+    }
 
-	
-	static public string ReorderLinesOfDataFiles(string sIn) {
-		string sOut;
-		sIn = sIn.Trim();
-		string[] lines = sIn.Split('\n');
-		sOut = "";
-		for (int i=lines.Length-1; i>=0; i--) {
-			sOut += lines[i];
+    
+    static public string ReorderLinesOfDataFiles(string sIn) {
+        string sOut;
+        sIn = sIn.Trim();
+        string[] lines = sIn.Split('\n');
+        sOut = "";
+        for (int i=lines.Length-1; i>=0; i--) {
+            sOut += lines[i];
         }
         return sOut;
     }
