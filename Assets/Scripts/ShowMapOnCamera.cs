@@ -1,4 +1,27 @@
-﻿using UnityEngine;
+﻿/* A component that manages a small pool of tiles to represent a much larger area */
+
+/* CRITICAL NOTE ON TILES AND OBJECT POOLS--
+ * 
+ * Object pools are a tried-and-true performance-optimization technique wherein a
+ * massive number of perceived objects are represented by a small handful of real ones.
+ * Example Gif: https://dl.dropboxusercontent.com/u/43353799/ShareX/2017/01/camera_movement_object_pool.gif
+ * Official unity discussion: https://unity3d.com/learn/tutorials/topics/scripting/object-pooling
+ * 
+ * This P1 template uses object pooling on the tile objects. In this way, only hundreds of tiles are
+ * needed to represent a dungeon, rather than thousands.
+ * 
+ * Put simply, when the camera moves, tile objects that are no longer visible jump "ahead" of where
+ * the camera is going, and change their sprite so they look like completely new tiles. Players are
+ * none the wiser.
+ * 
+ * You will need to consider the ramifications of this when dealing with persisting tile state.
+ * For instance, if a player unlocks a door, thus altering its state, and then the tile goes off
+ * screen, will the "unlocked" state of the door tile objects be remembered? Figure out how to make it so!
+ * 
+ * - AY
+ */
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 

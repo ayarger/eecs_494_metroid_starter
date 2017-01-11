@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿/* A component that implements (and provides an API for) a screen-shake effect */
+// Requires placement on a camera gameobject.
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +13,8 @@ public class ScreenShakeEffect : MonoBehaviour {
     float shake_radius = 0;
     float shake_speed = 0;
 
+    // Note: speed currently does not affect the effect.
+    // Ideally, it delays each jump of the camera by 'speed' frames.
     public static void Shake(float duration, float radius, float speed)
     {
         instance.shake_timer = duration;
